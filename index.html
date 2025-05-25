@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synergy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.4));
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            filter: blur(3px);
+            z-index: -1;
+        }
+
+        .logo-container {
+            text-align: center;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .logo {
+            max-width: 600px;
+            max-height: 450px;
+            width: auto;
+            height: auto;
+            filter: drop-shadow(0 15px 40px rgba(0,0,0,0.6));
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .tagline {
+            color: white;
+            font-size: 1.8rem;
+            margin-top: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7dd, #96cdd7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite alternate;
+        }
+
+        .server-info {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            padding: 4rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .server-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .server-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .server-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7dd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .server-subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 3rem;
+            color: #4ecdc4;
+            font-weight: 500;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, rgba(255,107,107,0.2), rgba(78,205,196,0.2));
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .info-card:hover::before {
+            opacity: 1;
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        .info-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(255,107,107,0.3);
+            border-color: #ff6b6b;
+        }
+
+        .info-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #4ecdc4, #45b7dd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+
+        .server-ip {
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, rgba(0,0,0,0.5), rgba(30,30,30,0.7));
+            padding: 1.2rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            border: 2px solid rgba(78,205,196,0.3);
+            font-weight: bold;
+            color: #4ecdc4;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .server-ip::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(78,205,196,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .server-ip:hover::before {
+            left: 100%;
+        }
+
+        .copy-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ff5252);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-left: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255,107,107,0.3);
+        }
+
+        .copy-btn:hover {
+            transform: scale(1.1) translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,107,107,0.5);
+            background: linear-gradient(45deg, #ff5252, #ff6b6b);
+        }
+
+        .discord-btn {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(45deg, #5865F2, #4752C4);
+            color: white;
+            text-decoration: none;
+            padding: 1.5rem 3rem;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(88,101,242,0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .discord-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .discord-btn:hover::before {
+            left: 100%;
+        }
+
+        .discord-btn:hover {
+            background: linear-gradient(45deg, #4752C4, #5865F2);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(88,101,242,0.6);
+        }
+
+        .discord-icon {
+            width: 28px;
+            height: 28px;
+            margin-right: 1rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                max-width: 450px;
+                max-height: 300px;
+            }
+
+            .server-title {
+                font-size: 2rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                gap: 2rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="logo-container">
+            <img src="https://via.placeholder.com/400x300/4ecdc4/ffffff?text=YOUR+LOGO" alt="Community Logo" class="logo" id="logo">
+        </div>
+    </section>
+
+    <section class="server-info">
+        <div class="server-container">
+            <h2 class="server-title">Join Our Server</h2>
+            <p class="server-subtitle">Connect with players from around the world</p>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>🎮 Minecraft Server</h3>
+                    <div class="server-ip">
+                        <strong>IP:</strong> <span id="server-ip">play.yourserver.com</span>
+                        <button class="copy-btn" onclick="copyToClipboard('server-ip')">Copy</button>
+                    </div>
+                    <div class="server-ip">
+                        <strong>Port:</strong> <span id="server-port">25565</span>
+                        <button class="copy-btn" onclick="copyToClipboard('server-port')">Copy</button>
+                    </div>
+                    <p>Java Edition 1.20+</p>
+                </div>
+
+                <div class="info-card">
+                    <h3>💬 Discord Community</h3>
+                    <p style="margin-bottom: 1.5rem; font-size: 1.1rem;">Chat, make friends, and stay updated with our active Discord server!</p>
+                    <a href="https://discord.gg/yourserver" class="discord-btn" target="_blank">
+                        <svg class="discord-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
+                        </svg>
+                        Join Discord
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+
+        const CONFIG = {
+            backgroundImage: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+            logoImage: 'https://via.placeholder.com/400x300/4ecdc4/ffffff?text=YOUR+LOGO',
+            serverIP: 'serverip',
+            serverPort: '25565',
+            discordLink: 'https://discord.gg/error'
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const heroSection = document.querySelector('.hero::before') || 
+                               document.styleSheets[0].insertRule('.hero::before { background-image: url("' + CONFIG.backgroundImage + '"); }', 0);
+            
+            document.getElementById('logo').src = CONFIG.logoImage;
+            
+            document.getElementById('server-ip').textContent = CONFIG.serverIP;
+            document.getElementById('server-port').textContent = CONFIG.serverPort;
+            
+            document.querySelector('.discord-btn').href = CONFIG.discordLink;
+        });
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            
+            navigator.clipboard.writeText(text).then(function() {
+                const btn = element.nextElementSibling;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.background = '#28a745';
+                
+                setTimeout(function() {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Could not copy text: ', err);
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            });
+        }
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.info-card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
